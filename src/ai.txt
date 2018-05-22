@@ -1,0 +1,65 @@
+NPCの行動を処理するスクリプト。
+#contents
+*NPCが空き瓶を生成すると固まる問題 [#o9b07520]
+106 名前：名無しさん＠お腹いっぱい。[sage] 投稿日：11/10/05 01:51:45 ID:XGfjQgIX
+NPCがカテゴリ番号52000のアイテム(飲み物)を使用する際、
+refitem(inv(3, インベントリ番号), 4)で1が返るかどうかをチェックしてない。
+そのため、NPCが空腹時の飲食で空き瓶を生成してしまうと、それを飲もうとし続けて固まってしまう。
+
+*逃亡フラグが初期化されない問題 [#x57b8e83]
+興奮度が1以上or関係値が10(ペット)のユニットが恐怖状態になると、変数retreatに1がセットされるが、
+この変数が0にリセットされるのは、関係値が10のユニットに順番が回ってきた時だけになってる。
+PCについてくるはずのグウェンが離れていくことがあるのはこれが原因。
+NPCターンの先頭辺りでretreatを0にリセットしたほうがいい。
+
+*NPCがグローバルマップの地形を破壊する問題 [#p173a4a7]
+冒険者を雇い、グローバルマップで契約期間の満了を迎える
+火炎瓶を飲み、火柱を冒険者に踏ませることで敵対化させると冒険者が山などの一部地形を破壊することがある
+気になるならAIの地形破壊行動にグローバルマップ以外という条件を付けるか
+蜘蛛の巣～炎の壁のスキル発動効果にグローバルマップなら終了という処理を付けるかするといいかも
+
+ai.hsp 414行目
+proc.hsp 2936行目
+
+*NPCの行動に-3（接近待ち）が選択された場合、攻撃対象との距離が1だと近接攻撃と遠隔攻撃を同時に行うことがある問題 [#gfebd446]
+**修正方法 [#ab9eb991]
+ai.hsp 513行目
+  if act=actWaitMelee{  
+    if distance=1:gosub *act_melee
+    if (rnd(3)=0)or(cc<maxFollower):if distance<defNpcFovFire :if fov_los(cX(cc),cY(cc),cX(tc),cY(tc)): call FindRangeWeapon :if stat=true : gosub *act_fire:goto *turn_end
+    goto *turn_end
+  }
+↓
+  if act=actWaitMelee{  
+    if distance=1{
+      gosub *act_melee
+    }else:if (rnd(3)=0)or(cc<maxFollower){
+      if distance<defNpcFovFire :if fov_los(cX(cc),cY(cc),cX(tc),cY(tc)): call *FindRangeWeapon :if stat=true : gosub *act_fire:goto *turn_end
+    }
+    goto *turn_end
+  }
+
+*NPCに言葉を覚えさせている場合、PCが餅をのどに詰まらせても助けてくれないことがある問題 [#e1eb7134]
+**修正方法 [#n1cb3a30]
+ai.hsp 99行目
+gotoをelseに変更して以降の餅の判定を通るようにする
+  if cnMsg(cc)!"" : if cBit(cMsgFile,cc)=false: if rnd(30)=0 : txtMore : txtEf coSkyBlue : txt ""+cnMsg(cc) : goto *ai_actionPre
+ 
+  if (cTxt(cc)!0)or(cBit(cMsgFile,cc)):if cBit(cShutup,cc)=false:if cTurn(cc)\uniqueTalkFreq=0:if rnd(uniqueTalkProb)=0{
+    if (cX(pc)>cX(cc)-mutterRange)&(cX(pc)<cX(cc)+mutterRange):if (cY(pc)>cY(cc)-mutterRange)&(cY(pc)<cY(cc)+mutterRange):if cRowAct(pc)!rowActPerform{
+      if cAiAggro(cc)<=0:customTalk cc,dbModeTxtCalm
+      if cAiAggro(cc)>0:customTalk cc,dbModeTxtAggro
+      }
+    }
+↓
+  if cnMsg(cc)!"" {
+    if cBit(cMsgFile,cc)=false: if rnd(30)=0 : txtMore : txtEf coSkyBlue : txt ""+cnMsg(cc)
+  }else{
+    if (cTxt(cc)!0)or(cBit(cMsgFile,cc)):if cBit(cShutup,cc)=false:if cTurn(cc)\uniqueTalkFreq=0:if rnd(uniqueTalkProb)=0{
+      if (cX(pc)>cX(cc)-mutterRange)&(cX(pc)<cX(cc)+mutterRange):if (cY(pc)>cY(cc)-mutterRange)&(cY(pc)<cY(cc)+mutterRange):if cRowAct(pc)!rowActPerform{
+        if cAiAggro(cc)<=0:customTalk cc,dbModeTxtCalm
+        if cAiAggro(cc)>0:customTalk cc,dbModeTxtAggro
+      }
+    }
+  }
+

@@ -1,0 +1,229 @@
+#contents
+*レシマス低層でのモンスター生成レベルがやや高くなることがある問題 [#t2256aed]
+773 名前：名無しさん＠お腹いっぱい。　[sage]　投稿日：2011/03/10(木) 11:13:37.54 ID:szKb1oV3 [1/2]
+obvjlvって変数が見つかったんだが、記述箇所が1カ所しかないしobjlvのtypoで間違いない。
+これによる影響はレシマス3層までのobjlvが5を超えることがある程度。
+
+*ヴェルニースのタイル設定が誤っている問題 [#j086e052]
+70 名前：名無しさん＠お腹いっぱい。[sage] 投稿日：11/04/24 08:57:15 ID:Qa6ZmizC
+~*label_1752でadataセットするときに 
+ヴェルニースのところでタイプミスがあって
+adata(18, p) = tstown2になってる
+ヴェルニースで使用するtile_fogがちょっと変わるくらいかな？
+
+配布ソースなら直ってるかも
+
+71 名前：名無しさん＠お腹いっぱい。[sage] 投稿日：11/04/24 22:49:46 ID:pbPkDdjb
+逆コンソースなら
+adata(18, p) = 2
+が正しいってことでおｋ？
+
+73 名前：名無しさん＠お腹いっぱい。[sage] 投稿日：11/04/24 22:54:24 ID:CxWLbAC/
+オリジナルだとtsTown?な#defineはtsTown1だけ
+で、
+#define tsTown1 2
+で設定されてるからそれでOK
+tsTown2の#defineし忘れだったとしたら猫の人に聞いてみないと分からない
+
+*冒険者が死んでアイテムを落としてもエンチャントの効果が残る問題 [#f392c8e3]
+88 名前：名無しさん＠お腹いっぱい。[sage] 投稿日：11/06/03 01:32:46 ID:sTs4VOfe
+冒険者を殺して装備を奪ったときエンチャントの効果が残る問題
+装備落としたときにも怪我から復帰したときにもchararefreshされていない
+map_preBeginで冒険者配置してるからその辺で
+r1 = rc
+gosub *label_1476
+しておくといいかも
+
+addnews 4で検索して出るちょっと上
+冒険者がクエスト達成して経験値得る処理なんだが
+cdata(35, rc) += cdata(38, rc) * cdata(38, rc) * cdata(38, rc) * 5
+これは簡単にオーバーフローするので
+cdata(35, rc) += limit(cdata(38, rc), 1, 1000) * limit(cdata(38, rc), 1, 1000) * 100
+にでもしておく
+
+*畑マップに入ったとき、成長判定が誤ったタイル情報で行われる問題 [#i32fac53]
+737 名前：名無しさん＠お腹いっぱい。[sage] 投稿日：2011/03/09(水) 00:41:15.38 ID:nRrH0tc4
+~>ore_hackの人
+畑の成長判定時の畑マスの判定を～って所が前から気になってて
+134500ちょっと上でその条件が「マップチップの種類が４のとき」に書きかえられてるの見つけたんだけど
+４だと雪マスみたいだしこれは２のままでよかったんじゃないか？
+もし間違ってたらスマン。あとちょくちょくパクッててスマン
+
+739 名前：名無しさん＠お腹いっぱい。[sage] 投稿日：2011/03/09(水) 03:46:24.33 ID:2iIfB6c5
+~>>737
+自分もそう思っていたのですが、畑に入った時のフンの処理がどうしてもうまく行かなくて
+原因を探ったところ、畑に入った時の処理時のみ畑が４(他は全て０)になっていたんです。
+その後にどのタイミングかは解りませんが２になるようです。
+
+**概要 [#c2d419c1]
+~*map_exitで*map_init呼ぶ
+
+~*map_init
+↓
+~*map_init_main　mTileFile:mdata(2)をセット
+↓
+~*map_preBegin
+↓
+~*map_beginで*check_renew呼ぶ
+　　　　　　*map_prepareTile呼ぶ
+↓
+~*check_renew内のrenew_minorで*item_seedGrowth呼ぶ
+↓
+~*map_prepareTileでmTileFileが更新されていたら(!mTileFileCurなら)
+mTileFileCurをmTileFileにして*mapchip_initを呼ぶ
+↓
+~*mapchip_initでmTileFile=1のとき畑タイルのtRoleをtCrop:2に
+
+つまり順番が逆なのでmdata(2)は更新されてもまだマップチップ情報が書き換わってない
+
+*自宅のマップフィートがあるマスの上に階段を置くと移動先階層が想定外の値になる問題 [#g925b493]
+
+map.hsp 150行目付近
+"階段を降りた。"で検索して出る少し上
+if mapItemFind(cX(cc),cY(cc),idDownstairs)!falseM:feat(1)=objDownstairs
+↓
+if mapItemFind(cX(cc),cY(cc),idDownstairs)!falseM:feat(1)=objDownstairs,0
+
+if mapItemFind(cX(cc),cY(cc),idUpstairs)!falseM:feat(1)=objUpstairs
+↓
+if mapItemFind(cX(cc),cY(cc),idUpstairs)!falseM:feat(1)=objUpstairs,0
+
+逆コンなら 130950行目付近
+"階段を降りた。"で検索して出る少し上
+feat(1) = 11
+↓
+feat(1) = 11, 0
+
+feat(1) = 10
+↓
+feat(1) = 10, 0
+
+これでおｋ
+
+*家に滞在させている仲間にも旅歩きの経験値が入ることがある問題 [#x3b295b1]
+を発ってから　で検索して出るあたり
+p++の上に
+if cArea(cnt):continue　を追加
+
+逆コンでも同様に
+p++の上に
+if cdata(80, cnt) {
+continue
+}
+を追加
+
+*依頼マップでの依頼を失敗して元のマップに戻ったとき、メッセージが意図通り表示されていない問題 [#g7601997]
+
+map.hsp 180行目付近
+if mType=mTypeQuest{ }内の
+rq=gQuestRef
+gosub *quest_exit
+この2行をコメントアウト
+
+遡ってproc "map_exit"の数行下
+msg_newLineの上に
+if mType=mTypeQuest{
+　rq=gQuestRef
+　gosub *quest_exit
+}
+を追加
+
+逆コンでは131050行目付近
+rq = gdata(72)
+gosub *label_2674
+これらをコメントアウト
+
+map_exitで検索して出る少し下
+msg_newlineの上に
+if ( mdata(6) == 7 ) {
+　rq = gdata(72)
+　gosub *label_2674
+}
+を追加
+
+*ノイエルで雨が降ったり、自宅で雪が降ったりする問題 [#y2c8551a]
+map.hsp 188行目付近
+if gQuest=0:if gAreaPrev!=areaWildness:gWorldX=areaX(gArea) : gWorldY=areaY(gArea) : gosub *weather_change
+↓
+if gQuest=0:if (gAreaPrev!=areaWildness)or(areaType(gArea)!mTypeWorld):gWorldX=areaX(gArea) : gWorldY=areaY(gArea) : gosub *weather_change
+
+野外から帰還を唱えるとgWorldX,gWorldYが更新されてなかった
+
+map.hsp 205行目付近
+if (mType!mTypeWorld):if (mType!mTypeLocal)or(mType=mTypeHome):if fixTransferMap=false:gWorldX=areaX(gAreaPrev) : gWorldY=areaY(gAreaPrev):else:fixTransferMap=false
+↓
+if (areaIcon(gAreaPrev))&(gAreaPrev!areaShowHouse):if(areaIcon(gArea)=0)or(gArea=areaShowHouse):if fixTransferMap=false:gWorldX=areaX(gAreaPrev) : gWorldY=areaY(gAreaPrev):else:fixTransferMap=false
+
+クエストマップ・アリーナ系・ショウルームから元いたマップに戻るとgWorldX,gWorldYがクエストマップ等の座標になってしまっていた
+野外以外から帰還を唱えるとgWorldX,gWorldYがgosub *weather_changeの後さらに書き換えられて帰還前のマップの座標になってしまっていた
+アイコンの有無で判定するのはちょっと乱暴かもしれないがこれでどうだろうか
+
+逆コンソースならこう
+131000-131100行目付近
+if ( gdata(19) != 2 ) {
+↓
+if ( gdata(19) != 2 & adata(0, gdata(20)) == 1 ) {
+
+if ( mdata(6) != 1 ) {
+if ( mdata(6) != 4 | mdata(6) == 5 ) {
+↓
+if ( adata(15, gdata(19)) != 0 & gdata(19) != 35)) {
+if ( adata(15, gdata(20)) == 0 | gdata(20) == 35)) {
+
+*初期洞窟の位置に建てたユーザー物件がバージョン更新時に移動する問題 [#q21e82b0]
+map.hsp 1820行目付近
+repeat headUserArea
+if (areaX(cnt)=0)or(areaY(cnt)=0)or(areaId(cnt)=0):continue
+の下に
+if areaIcon(cnt)=0 :continue
+if areaParent(cnt)!gArea :continue
+とでも追加
+
+先に1.22でセーブデータをアップデートしちゃうとそもそも意味ないけども
+
+*地殻変動が頻繁に起き続ける問題 [#l206a0a8]
+1.22にて、ワールドマップに出るたびに地殻変動が起きるバグ発生、サウスティリスに行ってから戻ってくると直ったけどね -- 2011-02-10 (木) 17:38:15
+Ver1.22突然地殻変動の頻度が異常に多くなってなぜかランダムネフィアの数が異常に少なくなった。 -- 2010-12-07 (火) 23:25:52
+
+92 名前：名無しさん＠お腹いっぱい。[sage] 投稿日：2011/05/07(土) 12:25:28.70 ID:VRHU9sE+
+あまりよろしくないけど、マップエディタ使ってオパ像出して試してみた
+既にプレイしてあるセーブ、つまり既に地殻変動が何度も起きているセーブでだが、
+100回くらい使ったら、ちらほらたまに見かけはするけど、大体禿げた
+150回くらい使ったらもう見かけなかった
+だから、地殻変動をひたすらやったらいつかはネフィアが消えていくだろうね
+
+ただし朗報
+サウスティリスにいって戻ってくると禿げが全部元通りになる
+だから開発版ならいくらでも地殻変動を起こしておそらく問題ない
+テストワールドだと駄目だった
+
+試したのは1.22だからそれ以外でも同じかはわからない
+安定版だと解決策があるのかどうかもわからない
+
+764 名前：名無しさん＠お腹いっぱい。[sage] 投稿日：2011/02/16(水) 22:37:05 ID:+bay/lM0
+俺も気になってたんで
+~>ワールドマップの円形脱毛。
+これ、ちょっと調べてみた
+マップ描画用のタイル変更した上でわざわざそのチップに置き換えてるから
+意図的な変更だな、こりゃ
+「何かがあった跡地」みたいにしたかったんじゃないか？
+
+**概要 [#ieb7a1a7]
+安定版では起こらない
+チップ番号33、これがあると周りにダンジョンが作られにくいチップなのでダンジョンが減る
+未クリアダンジョンの数が減ると地殻変動が必ず起こる仕様になっているので・・・
+
+*マップスタート位置情報がリセットされない問題 [#l3de19a2]
+ちょっと小耳に挟んだのですが、
+
+レシマスの洞窟で上り階段を上がった直後、レシマスに帰還をすると、
+なんと到達最下層の下り階段の目の前に帰還できるそうですよ！
+
+冒険者 (2010-07-17 (土) 20:28:47)
+
+裏技というか変な挙動なんで、動作を確認してバグ報告予定リストに入れてみた。 -- 2010-07-17 (土) 21:04:46
+verはいくつだ -- 2010-07-17 (土) 21:41:42
+
+すくつでもできる
+map_placecharaonentranceに入力される gdata(26):初期配置種類 が階段昇ったときに 2:降り階段の位置 に上書きされている
+
