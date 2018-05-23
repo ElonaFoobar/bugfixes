@@ -22,6 +22,39 @@
 <h1 class="title">Elona Bug Fixes</h1>
 <p class="author"></p>
 </header>
+<nav id="TOC">
+<ul>
+<li><a href="#action.hsp">action.hsp</a></li>
+<li><a href="#adv.hsp">adv.hsp</a></li>
+<li><a href="#ai.hsp">ai.hsp</a></li>
+<li><a href="#blend.hsp">blend.hsp</a></li>
+<li><a href="#calculation.hsp">calculation.hsp</a></li>
+<li><a href="#chara.hsp">chara.hsp</a></li>
+<li><a href="#chara_func.hsp">chara_func.hsp</a></li>
+<li><a href="#chat.hsp">chat.hsp</a></li>
+<li><a href="#command.hsp">command.hsp</a></li>
+<li><a href="#init.hsp">init.hsp</a></li>
+<li><a href="#item.hsp">item.hsp</a></li>
+<li><a href="#item_data.hsp">item_data.hsp</a></li>
+<li><a href="#item_func.hsp">item_func.hsp</a></li>
+<li><a href="#main.hsp">main.hsp</a></li>
+<li><a href="#map.hsp">map.hsp</a></li>
+<li><a href="#map_user.hsp">map_user.hsp</a></li>
+<li><a href="#material.hsp">material.hsp</a></li>
+<li><a href="#module.hsp">module.hsp</a></li>
+<li><a href="#proc.hsp">proc.hsp</a></li>
+<li><a href="#screen.hsp">screen.hsp</a></li>
+<li><a href="#system.hsp">system.hsp</a></li>
+<li><a href="#others">Others</a></li>
+<li><a href="#db_item.hsp">db_item.hsp</a></li>
+<li><a href="#db_race.hsp">db_race.hsp</a></li>
+<li><a href="#help.hsp">help.hsp</a></li>
+<li><a href="#quest.hsp">quest.hsp</a></li>
+<li><a href="#sound.hsp">sound.hsp</a></li>
+<li><a href="#text.hsp">text.hsp</a></li>
+<li><a href="#random.hsp">random.hsp</a></li>
+</ul>
+</nav>
 <h1 id="action.hsp">action.hsp</h1>
 <p>*宝箱の開錠難度が不正な数値になる問題 [#v2b827d6] 97 名前：名無しさん＠お腹いっぱい。　[sage]　投稿日：2011/02/28(月) 17:23:36.91 ID:vuzB5+ut 鍵開けバグの原因: ジャンプ直前に変数valをセットする必要があるサブルーチン同士のネスト。</p>
 <p>概要: ロックピック使用サブルーチンとプロンプト表示サブルーチンが、 共にジャンプ前にセットされた変数valの値を使うから、 開錠に失敗して前者から後者にジャンプした時点で、valの中身が開錠難度からプロンプトのX座標になってしまう。 再試行を選択するとロックピック使用サブルーチンの先頭にジャンプするだけだから、 キャンセルしてロックピック使用サブルーチンから抜けない限り、開錠難度 = プロンプトのX座標のままになる。</p>

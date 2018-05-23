@@ -18,6 +18,7 @@ $(DOCUMENT): $(SOURCES) $(STYLE) $(FILTERS)
 	$(PANDOC) \
 		--from=markdown --to=html5 \
 		--standalone \
+		--toc --toc-depth=2 \
 		--filter $(FILTERS) \
 		--css=$(STYLE) \
 		--output=$@ \
