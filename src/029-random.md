@@ -1,4 +1,6 @@
-#contents
+# random.hsp
+
+
 *rnd関数の仕様 [#z66b27d9]
 [[HSP命令講座 <rnd関数>>http://lhsp.s206.xrea.com/command/rnd.html]]
 >　rnd(数値)

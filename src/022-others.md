@@ -1,12 +1,5 @@
-#contents
-* 左メニューに記載されて無いページ [#c292adf1]
-他のページと内容が被ってるかもしれないが、埋もれるのもまずいのでとりあえずここに載せておく。
-[[db_item.hsp]]
-[[db_race.hsp]]
-[[help.hsp]]
-[[quest.hsp]]
-[[sound.hsp]]
-[[text.hsp]]
+# Others
+
 
 * *map_init_mainで指定された音楽が再生されない問題 [#x51b38b6]
 ~>>129の内容は差し戻しておいてくれると助かるます

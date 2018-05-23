@@ -1,5 +1,6 @@
-情報画面の表示・願いの処理を行うスクリプト。
-#contents
+# command.hsp
+
+
 *乗馬時の武器重量判定が誤って表示される問題 [#h69e9976]
 
 ~*show_weaponStatラベル(*label_2049)
