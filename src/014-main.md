@@ -29,7 +29,7 @@ flt:item_create -1,idGold,cX(pc),cY(pc),200+iNum(ci)*5
 を
 noStack=true:flt:item_create -1,idGold,cX(pc),cY(pc):iNum(ci)=200+iNum(ci)*5
 に変更
-#br
+
 逆根
 248157行目のすぐ上に
 nostack = 1
@@ -38,7 +38,7 @@ nostack = 1
 248158行目のすぐ下に
 inv(0, ci) = 200 + inv(0, ci) * 5
 を追加
-#br
+
 で、多分いいんでなかろか
 設定値が想定通りかは知らね
 
