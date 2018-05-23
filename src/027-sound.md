@@ -1,7 +1,7 @@
 # sound.hsp
 
 
-* *map_init_mainで指定された音楽が再生されない問題 [#x51b38b6]
+## `*map_init_main`で指定された音楽が再生されない問題
 ~>>129の内容は差し戻しておいてくれると助かるます
 
 if cfg_music=false : returnの下に
