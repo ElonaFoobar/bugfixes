@@ -25,7 +25,7 @@ module.hsp 2294行目
  m=""+strmid(s,0,len)
 ↓
  m=""+strmid(m,0,len)
-## *参考リンク
+
 [[HSP3のFAQ:エラーメッセージの意味と対処法が分からない>http://quasiquote.org/hspwiki/HSP3%E3%81%AEFAQ%3a%E3%82%A8%E3%83%A9%E3%83%BC%E3%83%A1%E3%83%83%E3%82%BB%E3%83%BC%E3%82%B8%E3%81%AE%E6%84%8F%E5%91%B3%E3%81%A8%E5%AF%BE%E5%87%A6%E6%B3%95%E3%81%8C%E5%88%86%E3%81%8B%E3%82%89%E3%81%AA%E3%81%84#H-zupint]]
 
 

@@ -51,6 +51,7 @@ chara.hsp 458行目
     if fltSelect=0{
 ↓
     if fltSelect=0:if filterMax=0:if fltnRace="":if fltTypeMajor=0{
+
 ## 高レベルで生成されたカオスシェイプの部位が最大30まで増える問題
 
 chara.hsp 46行目

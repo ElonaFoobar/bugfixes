@@ -84,18 +84,18 @@ init.hsp 4024行目
 ## エンチャントにおいて属性が意図通り決定されていない問題
 属性のレア度を比較するとき参照先が間違っていて関数が機能していない
 init.hsp 2846行目付近
-#define global ctype skillRare(%1)sdataRef@(4,%1)
+`#define global ctype skillRare(%1)sdataRef@(4,%1)`
 ↓
-#define global ctype skillRare(%1)sdataRef@(3,%1)
+`#define global ctype skillRare(%1)sdataRef@(3,%1)`
 
 item_data.hsp 213行目付近
-#defcfunc randomEle内
+`#defcfunc randomEle内`
 if p!1{
 ↓
 if skillRare(p)!1{
 
 逆コンでは13300行目付近
-#defcfunc randomele 内
+#`defcfunc randomele 内`
 if ( p@m45 != 1 ) →if ( sdataref(3, p@m45) != 1 )
 sdataref(4, p@m45)→sdataref(3, p@m45)　 (2ヶ所)
 sdataref(4, i@m45)→sdataref(3, i@m45)

@@ -97,6 +97,7 @@ sx(3) = cdata(1, 0) - 17 / 2
 　ついでにウィンドウ高さの768制限を解除(変更)
 　screen.hsp 17行目
 　　２つの768を適当な任意の値へ変更
+
 ## 遠隔弾が縦方向にずれる問題
 screen.hsp 666行目
  aX=(cX(cc)-scX)*tileS : aY=(cY(cc)-scY)*tileS-12
