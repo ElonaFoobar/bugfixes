@@ -238,15 +238,6 @@
 <li><a href="#入力フォームを呼び出すとfailed-to-get-window-idと表示される問題">入力フォームを呼び出すとFailed to get WINDOW IDと表示される問題</a></li>
 <li><a href="#水の波紋をオフにしているとタイトルの文字がにじむ問題">水の波紋をオフにしているとタイトルの文字がにじむ問題</a></li>
 </ul></li>
-<li><a href="#others">Others</a><ul>
-<li><a href="#カジノで連勝するほどエーテル抗体の取得率が下がる問題">カジノで連勝するほどエーテル抗体の取得率が下がる問題</a></li>
-<li><a href="#ダンジョンで下り階段の前に帰還できる問題">ダンジョンで下り階段の前に帰還できる問題</a></li>
-<li><a href="#信仰が既に限界まで高まっているときに捧げものをするとご褒美フラグが立たない問題">信仰が既に限界まで高まっているときに捧げものをするとご褒美フラグが立たない問題</a></li>
-<li><a href="#捧げ物のエフェクトがpc以外に表示される問題">捧げ物のエフェクトがPC以外に表示される問題</a></li>
-<li><a href="#護衛依頼の報酬が正しく計算されていない問題">護衛依頼の報酬が正しく計算されていない問題</a></li>
-<li><a href="#暗記スキル未取得のとき脳機械化の変異でスキルが上昇する問題">暗記スキル未取得のとき、脳機械化の変異でスキルが上昇する問題</a></li>
-<li><a href="#護衛依頼失敗時に護衛対象がマップ上に残り続けることがある問題">護衛依頼失敗時に護衛対象がマップ上に残り続けることがある問題</a></li>
-</ul></li>
 <li><a href="#db_item.hsp">db_item.hsp</a><ul>
 <li><a href="#アイテムの説明に誤字がある問題">アイテムの説明に誤字がある問題</a></li>
 </ul></li>
@@ -265,7 +256,14 @@
 <li><a href="#text.hsp">text.hsp</a><ul>
 <li><a href="#収穫依頼の報酬計算がオーバーフローする問題">収穫依頼の報酬計算がオーバーフローする問題</a></li>
 </ul></li>
-<li><a href="#random.hsp">random.hsp</a><ul>
+<li><a href="#others">Others</a><ul>
+<li><a href="#カジノで連勝するほどエーテル抗体の取得率が下がる問題">カジノで連勝するほどエーテル抗体の取得率が下がる問題</a></li>
+<li><a href="#ダンジョンで下り階段の前に帰還できる問題">ダンジョンで下り階段の前に帰還できる問題</a></li>
+<li><a href="#信仰が既に限界まで高まっているときに捧げものをするとご褒美フラグが立たない問題">信仰が既に限界まで高まっているときに捧げものをするとご褒美フラグが立たない問題</a></li>
+<li><a href="#捧げ物のエフェクトがpc以外に表示される問題">捧げ物のエフェクトがPC以外に表示される問題</a></li>
+<li><a href="#護衛依頼の報酬が正しく計算されていない問題">護衛依頼の報酬が正しく計算されていない問題</a></li>
+<li><a href="#暗記スキル未取得のとき脳機械化の変異でスキルが上昇する問題">暗記スキル未取得のとき、脳機械化の変異でスキルが上昇する問題</a></li>
+<li><a href="#護衛依頼失敗時に護衛対象がマップ上に残り続けることがある問題">護衛依頼失敗時に護衛対象がマップ上に残り続けることがある問題</a></li>
 <li><a href="#rnd関数の仕様">rnd関数の仕様</a></li>
 <li><a href="#rndの引数が32768を超える処理">rnd()の引数が32768を超える処理</a></li>
 <li><a href="#ex_rand命令の仕様">ex_rand命令の仕様</a></li>
@@ -1003,31 +1001,6 @@ aplsel windowTitle:if stat=1:dialog &quot;Failed to get WINDOW ID&quot;,1:clrobj
 <p>system.hsp 1422行目 if cfg_titleEffect:if water_debug=0:water_getimage:water_debug=1 gsel selInf :pos 960,96:picload exeDir+“graphic\deco_title.bmp”,1 gsel selScr :gmode 0:pos 0,0:gcopy selBuf,0,0,windowW,windowH:gmode 2</p>
 <p>while numlock_off redraw 0 tx+=(rnd(10)+2)<em>p(1):ty+=(rnd(10)+2)</em>p(2) if rnd(10)=0:tx=rnd(800):ty=rnd(600):p(1)=rnd(9)-4,rnd(9)-4 f=false :if (tx&gt;40)&amp;(tx&lt;500)&amp;(ty&gt;100)&amp;(ty&lt;450):f=true if f=false :if rnd(10)=0:f=2 if f=false :water_setripple tx, ty, rnd(300), rnd(4) if cfg_titleEffect:water_calc :water_draw ↓ if water_debug=0:water_getimage:water_debug=1 ;gsel selInf :pos 960,96:picload exeDir+“graphic\deco_title.bmp”,1 ;使用されていないのでコメントアウト gsel selScr :gmode 0:pos 0,0:gcopy selBuf,0,0,windowW,windowH:gmode 2</p>
 <p>while numlock_off redraw 0 if cfg_titleEffect{ tx+=(rnd(10)+2)<em>p(1):ty+=(rnd(10)+2)</em>p(2) if rnd(10)=0:tx=rnd(800):ty=rnd(600):p(1)=rnd(9)-4,rnd(9)-4 f=false :if (tx&gt;40)&amp;(tx&lt;500)&amp;(ty&gt;100)&amp;(ty&lt;450):f=true if f=false :if rnd(10)=0:f=2 if f=false :water_setripple tx, ty, rnd(300), rnd(4) water_calc }else{ water_refresh } water_draw</p>
-<h1 id="others">Others</h1>
-<h2 id="カジノで連勝するほどエーテル抗体の取得率が下がる問題">カジノで連勝するほどエーテル抗体の取得率が下がる問題</h2>
-<p>カジノ景品おまけのエーテル抗体の取得率修正 　カジノ景品のおまけで貰えるエーテル抗体の取得率が連勝数が４の時が最大で以降 　連勝するごとに下がっていく 　対処 　Noa氏への問い合わせの結果、「連勝すればするほど取得率が上がるように」が意図との 　ことだったので 　txtadv.hsp 737行目 　　if rnd(200)&gt;(winRow<em>5+5)をif rnd(200)&lt;(winRow</em>5+5)へ変更 　※エーテル抗体の取得難度が上がると思われるため要調整？</p>
-<h2 id="ダンジョンで下り階段の前に帰還できる問題">ダンジョンで下り階段の前に帰還できる問題</h2>
-<p>ちょっと小耳に挟んだのですが、</p>
-<p>レシマスの洞窟で上り階段を上がった直後、レシマスに帰還をすると、 なんと到達最下層の下り階段の目の前に帰還できるそうですよ！</p>
-<p>冒険者 (2010-07-17 (土) 20:28:47)</p>
-<p>裏技というか変な挙動なんで、動作を確認してバグ報告予定リストに入れてみた。 – 2010-07-17 (土) 21:04:46 verはいくつだ – 2010-07-17 (土) 21:41:42</p>
-<p>map.func.hsp</p>
-<h2 id="信仰が既に限界まで高まっているときに捧げものをするとご褒美フラグが立たない問題">信仰が既に限界まで高まっているときに捧げものをするとご褒美フラグが立たない問題</h2>
-<p>処理の順だけ変えておく god.hsp 6行目</p>
-<p>#deffunc modPiety int a if sPrayer(pc)*100&lt;cPiety(pc){ txt lang(“あなたの信仰は既に限界まで高まっている。”,&quot; Your God becomes indifferent to your gift.“) return false } if gGodRank=4 : if cPiety(pc)&gt;=defGodGift3:gGodRank++:txtGod cGod(pc),txtGodLove if gGodRank=2 : if cPiety(pc)&gt;=defGodGift2:gGodRank++:txtGod cGod(pc),txtGodLike if gGodRank=0 : if cPiety(pc)&gt;=defGodGift1:gGodRank++:txtGod cGod(pc),txtGodLike</p>
-<p>cPiety(pc)+=a/(1+(gArea=areaShowHouse)*9) return true ↓ #deffunc modPiety int a if gGodRank=4 : if cPiety(pc)&gt;=defGodGift3:gGodRank++:txtGod cGod(pc),txtGodLove if gGodRank=2 : if cPiety(pc)&gt;=defGodGift2:gGodRank++:txtGod cGod(pc),txtGodLike if gGodRank=0 : if cPiety(pc)&gt;=defGodGift1:gGodRank++:txtGod cGod(pc),txtGodLike</p>
-<p>if sPrayer(pc)*100&lt;cPiety(pc){ txt lang(“あなたの信仰は既に限界まで高まっている。”,&quot; Your God becomes indifferent to your gift.“) return false } cPiety(pc)+=a/(1+(gArea=areaShowHouse)*9) return true</p>
-<h2 id="捧げ物のエフェクトがpc以外に表示される問題">捧げ物のエフェクトがPC以外に表示される問題</h2>
-<p>god.hsp 376行目 call anime,(animeId=aniOffer) ↓ call anime,(animeId=aniOffer,tc=pc)</p>
-<h2 id="護衛依頼の報酬が正しく計算されていない問題">護衛依頼の報酬が正しく計算されていない問題</h2>
-<p>quest.hsp 168行目 p=qMap(qParam1(rq)) ↓ p=qParam1(rq)</p>
-<h2 id="暗記スキル未取得のとき脳機械化の変異でスキルが上昇する問題">暗記スキル未取得のとき、脳機械化の変異でスキルが上昇する問題</h2>
-<p>trait.hsp 550-551行目 if sORG(rsMemorize,pc)=0:return false を挿入</p>
-<h2 id="護衛依頼失敗時に護衛対象がマップ上に残り続けることがある問題">護衛依頼失敗時に護衛対象がマップ上に残り続けることがある問題</h2>
-<p>詳細な再現手順と現象については http://www.nicovideo.jp/watch/sm32556762 の 7:00頃を参照 動画はoomExであるが、v1.22でも発生することを確認済み 鼓舞などによって護衛依頼失敗時の大ダメージ(999,999)を耐えさせることで護衛対象者が生き残った場合、 扱いとしては対象者が死んだことになり依頼も失敗するが、画面上には残り続け、さらに話しかけるといった動作も行うことができる。 これ以外の簡単な再現方法として、ソースコードを書き換えてdmghp関数に渡すダメージ量を減らす、護衛対象のHPを999,999よりも大きくする、dmghpを呼び出さないようにする、といった方法がある。</p>
-<p>以下擬似コード function 依頼失敗: if その依頼が護衛: show_message “あなたは護衛の任務を果たせなかった。” foreach 全ペット: if そのペットが護衛対象で、その依頼が今まさに失敗した依頼: 護衛対象であるというフラグを折る if まだ生きている: show_message “「時間切れだ。こうなったら…」” 999,999のダメージを与える 強制的に殺す (<em>) 問題なのは(</em>)の箇所で、cdata(0, X)（Xはキャラクタ番号） をゼロにしているのだが、これだけでは完全に殺しきることができない。 Elonaにおいてキャラクタ番号はmap(X, Y, 1)（X、Yはマップの座標）でも参照されており、こちらもゼロにしておかないと 画面上の描写が残ったり、話しかけることができたりする。cdata(0, X)がゼロになっていてもメモリ上には存在しているので cdata(0, X)がゼロでないかを確認しない処理ではキャラクタが残り続ける。逆に言えば、cdata(0, X)を確認する場合には 無効なキャラクタと判定される。これによって上述の動画に挙げられているような、動かない、マップ移動すると消えるといった 現象を説明することができる。すなわちこれらの処理ではcdata(0, X)が非ゼロかどうかを確認しているため、死んだキャラクタであると 正確に判断されている。</p>
-<p>この問題はmap(X, Y, 1)を参照する箇所において参照先のキャラクタのcdata(0, X)がゼロでないかどうかを確認するという方法でも修正可能だが、 (*)の箇所で同時にmap(X, Y, 1)もゼロクリアしておく方が無難と考えられる。すなわち、 cdata(0, tc) = 0 cell_removechara cdata(1, tc), cdata(2, tc) ; 追加</p>
-<p>この問題はキャラクタを強制的に殺す方法としてcdata(0, X) = 0を用いていることである。これだけではマップ上から消し去れないため、 関数を新たに定義して、cdata(0, X)のクリアとmap(X, Y, 1)のクリアを両方行わせるべきである。 なお、chara_vanquishがほぼ同様の動作をするがそれで良いかは未確認。 この件のように「必ず死ぬと思われる処理」の後に「cdata(0, X)のクリア」を行なっている箇所は他にリリーを 殺す処理がある。リリーを何らかの方法でダメージ(9,999)に耐えさせると同様の現象が発生することを確認している。</p>
 <h1 id="db_item.hsp">db_item.hsp</h1>
 <h2 id="アイテムの説明に誤字がある問題">アイテムの説明に誤字がある問題</h2>
 <p>結婚指輪のテキスト 当然ながらこの首輪は→当然ながらこの指輪は</p>
@@ -1064,7 +1037,31 @@ aplsel windowTitle:if stat=1:dialog &quot;Failed to get WINDOW ID&quot;,1:clrobj
 <h1 id="text.hsp">text.hsp</h1>
 <h2 id="収穫依頼の報酬計算がオーバーフローする問題">収穫依頼の報酬計算がオーバーフローする問題</h2>
 <p>収穫依頼のボーナス計算にバグあるね。報酬11317gp ノルマ132.5sの依頼で201s収穫したのに11317gpだった。同等の他の依頼で170収穫した時はちゃんと増えたから上限ではなさそう。 – 2011-04-15 (金) 05:07:49 ↑追記　140の依頼で250収穫してもボーナスがなかった。セリフは「色をつけた」になってる。200以上収穫したらダメなのかもしれない。 – 2011-04-15 (金) 19:13:05</p>
-<h1 id="random.hsp">random.hsp</h1>
+<h1 id="others">Others</h1>
+<h2 id="カジノで連勝するほどエーテル抗体の取得率が下がる問題">カジノで連勝するほどエーテル抗体の取得率が下がる問題</h2>
+<p>カジノ景品おまけのエーテル抗体の取得率修正 　カジノ景品のおまけで貰えるエーテル抗体の取得率が連勝数が４の時が最大で以降 　連勝するごとに下がっていく 　対処 　Noa氏への問い合わせの結果、「連勝すればするほど取得率が上がるように」が意図との 　ことだったので 　txtadv.hsp 737行目 　　if rnd(200)&gt;(winRow<em>5+5)をif rnd(200)&lt;(winRow</em>5+5)へ変更 　※エーテル抗体の取得難度が上がると思われるため要調整？</p>
+<h2 id="ダンジョンで下り階段の前に帰還できる問題">ダンジョンで下り階段の前に帰還できる問題</h2>
+<p>ちょっと小耳に挟んだのですが、</p>
+<p>レシマスの洞窟で上り階段を上がった直後、レシマスに帰還をすると、 なんと到達最下層の下り階段の目の前に帰還できるそうですよ！</p>
+<p>冒険者 (2010-07-17 (土) 20:28:47)</p>
+<p>裏技というか変な挙動なんで、動作を確認してバグ報告予定リストに入れてみた。 – 2010-07-17 (土) 21:04:46 verはいくつだ – 2010-07-17 (土) 21:41:42</p>
+<p>map.func.hsp</p>
+<h2 id="信仰が既に限界まで高まっているときに捧げものをするとご褒美フラグが立たない問題">信仰が既に限界まで高まっているときに捧げものをするとご褒美フラグが立たない問題</h2>
+<p>処理の順だけ変えておく god.hsp 6行目</p>
+<p>#deffunc modPiety int a if sPrayer(pc)*100&lt;cPiety(pc){ txt lang(“あなたの信仰は既に限界まで高まっている。”,&quot; Your God becomes indifferent to your gift.“) return false } if gGodRank=4 : if cPiety(pc)&gt;=defGodGift3:gGodRank++:txtGod cGod(pc),txtGodLove if gGodRank=2 : if cPiety(pc)&gt;=defGodGift2:gGodRank++:txtGod cGod(pc),txtGodLike if gGodRank=0 : if cPiety(pc)&gt;=defGodGift1:gGodRank++:txtGod cGod(pc),txtGodLike</p>
+<p>cPiety(pc)+=a/(1+(gArea=areaShowHouse)*9) return true ↓ #deffunc modPiety int a if gGodRank=4 : if cPiety(pc)&gt;=defGodGift3:gGodRank++:txtGod cGod(pc),txtGodLove if gGodRank=2 : if cPiety(pc)&gt;=defGodGift2:gGodRank++:txtGod cGod(pc),txtGodLike if gGodRank=0 : if cPiety(pc)&gt;=defGodGift1:gGodRank++:txtGod cGod(pc),txtGodLike</p>
+<p>if sPrayer(pc)*100&lt;cPiety(pc){ txt lang(“あなたの信仰は既に限界まで高まっている。”,&quot; Your God becomes indifferent to your gift.“) return false } cPiety(pc)+=a/(1+(gArea=areaShowHouse)*9) return true</p>
+<h2 id="捧げ物のエフェクトがpc以外に表示される問題">捧げ物のエフェクトがPC以外に表示される問題</h2>
+<p>god.hsp 376行目 call anime,(animeId=aniOffer) ↓ call anime,(animeId=aniOffer,tc=pc)</p>
+<h2 id="護衛依頼の報酬が正しく計算されていない問題">護衛依頼の報酬が正しく計算されていない問題</h2>
+<p>quest.hsp 168行目 p=qMap(qParam1(rq)) ↓ p=qParam1(rq)</p>
+<h2 id="暗記スキル未取得のとき脳機械化の変異でスキルが上昇する問題">暗記スキル未取得のとき、脳機械化の変異でスキルが上昇する問題</h2>
+<p>trait.hsp 550-551行目 if sORG(rsMemorize,pc)=0:return false を挿入</p>
+<h2 id="護衛依頼失敗時に護衛対象がマップ上に残り続けることがある問題">護衛依頼失敗時に護衛対象がマップ上に残り続けることがある問題</h2>
+<p>詳細な再現手順と現象については http://www.nicovideo.jp/watch/sm32556762 の 7:00頃を参照 動画はoomExであるが、v1.22でも発生することを確認済み 鼓舞などによって護衛依頼失敗時の大ダメージ(999,999)を耐えさせることで護衛対象者が生き残った場合、 扱いとしては対象者が死んだことになり依頼も失敗するが、画面上には残り続け、さらに話しかけるといった動作も行うことができる。 これ以外の簡単な再現方法として、ソースコードを書き換えてdmghp関数に渡すダメージ量を減らす、護衛対象のHPを999,999よりも大きくする、dmghpを呼び出さないようにする、といった方法がある。</p>
+<p>以下擬似コード function 依頼失敗: if その依頼が護衛: show_message “あなたは護衛の任務を果たせなかった。” foreach 全ペット: if そのペットが護衛対象で、その依頼が今まさに失敗した依頼: 護衛対象であるというフラグを折る if まだ生きている: show_message “「時間切れだ。こうなったら…」” 999,999のダメージを与える 強制的に殺す (<em>) 問題なのは(</em>)の箇所で、cdata(0, X)（Xはキャラクタ番号） をゼロにしているのだが、これだけでは完全に殺しきることができない。 Elonaにおいてキャラクタ番号はmap(X, Y, 1)（X、Yはマップの座標）でも参照されており、こちらもゼロにしておかないと 画面上の描写が残ったり、話しかけることができたりする。cdata(0, X)がゼロになっていてもメモリ上には存在しているので cdata(0, X)がゼロでないかを確認しない処理ではキャラクタが残り続ける。逆に言えば、cdata(0, X)を確認する場合には 無効なキャラクタと判定される。これによって上述の動画に挙げられているような、動かない、マップ移動すると消えるといった 現象を説明することができる。すなわちこれらの処理ではcdata(0, X)が非ゼロかどうかを確認しているため、死んだキャラクタであると 正確に判断されている。</p>
+<p>この問題はmap(X, Y, 1)を参照する箇所において参照先のキャラクタのcdata(0, X)がゼロでないかどうかを確認するという方法でも修正可能だが、 (*)の箇所で同時にmap(X, Y, 1)もゼロクリアしておく方が無難と考えられる。すなわち、 cdata(0, tc) = 0 cell_removechara cdata(1, tc), cdata(2, tc) ; 追加</p>
+<p>この問題はキャラクタを強制的に殺す方法としてcdata(0, X) = 0を用いていることである。これだけではマップ上から消し去れないため、 関数を新たに定義して、cdata(0, X)のクリアとmap(X, Y, 1)のクリアを両方行わせるべきである。 なお、chara_vanquishがほぼ同様の動作をするがそれで良いかは未確認。 この件のように「必ず死ぬと思われる処理」の後に「cdata(0, X)のクリア」を行なっている箇所は他にリリーを 殺す処理がある。リリーを何らかの方法でダメージ(9,999)に耐えさせると同様の現象が発生することを確認している。</p>
 <h2 id="rnd関数の仕様">rnd関数の仕様</h2>
 <p>[[HSP命令講座 <rnd関数>&gt;http://lhsp.s206.xrea.com/command/rnd.html]] &gt;　rnd(数値) &gt;　第１パラメータに乱数発生範囲を指定します。指定できる数値は「1～32768」です。たとえば、１００を指定したならば、「０～９９」の範囲でバラバラな数値が返ります。</p>
 <p>rnd()の引数が32768を超えても、rnd(32768)と同様に扱われる。 ゴールドベルのドロップ金貨や武器の属性追加ダメージなど、 elonaではいくつもの処理でrnd()の引数が32768を超える場面がある。</p>
