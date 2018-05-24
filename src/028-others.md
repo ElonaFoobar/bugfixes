@@ -55,21 +55,21 @@ god.hsp 6行目
   return true
 
 
-## [ ] 捧げ物のエフェクトがPC以外に表示される問題
+## [x] 捧げ物のエフェクトがPC以外に表示される問題
 
 god.hsp 376行目
   call anime,(animeId=aniOffer)
 ↓
   call anime,(animeId=aniOffer,tc=pc)
 
-## [ ] 護衛依頼の報酬が正しく計算されていない問題
+## [x] 護衛依頼の報酬が正しく計算されていない問題
 
 quest.hsp 168行目
     p=qMap(qParam1(rq))
 ↓
     p=qParam1(rq)
 
-## [ ] 暗記スキル未取得のとき、脳機械化の変異でスキルが上昇する問題
+## [x] 暗記スキル未取得のとき、脳機械化の変異でスキルが上昇する問題
 
 trait.hsp 550-551行目
     if sORG(rsMemorize,pc)=0:return false
@@ -210,7 +210,7 @@ map_user.hsp 412行目
 ↓
   unlockRand
 
-## [ ] 生きている武器でエンチャントリストを見ると乱数が固定される問題
+## [x] 生きている武器でエンチャントリストを見ると乱数が固定される問題
 引数なしのex_randomizeは乱数を固定してしまう
 
 init.hsp 4268行目
@@ -218,3 +218,4 @@ init.hsp 4268行目
 ↓
   #define global unlockRand randomize:ex_randomize_time
 
+追記: 引数なしのex_randomizeは時刻でシード設定するように元からしていたので無問題
