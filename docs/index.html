@@ -262,8 +262,6 @@
 </ul></li>
 <li><a href="#quest.hsp">quest.hsp</a><ul>
 <li><a href="#護衛対象が期限切れで死んだときレイハンドで生き返らせると護衛対象フラグが消える問題">[ ] 護衛対象が期限切れで死んだときレイハンドで生き返らせると護衛対象フラグが消える問題</a></li>
-</ul></li>
-<li><a href="#sound.hsp">sound.hsp</a><ul>
 <li><a href="#map_init_mainで指定された音楽が再生されない問題">[ ] <code>*map_init_main</code>で指定された音楽が再生されない問題</a></li>
 </ul></li>
 <li><a href="#text.hsp">text.hsp</a><ul>
@@ -286,21 +284,50 @@
 </nav>
 <h1 id="action.hsp">action.hsp</h1>
 <h2 id="x-宝箱の開錠難度が不正な数値になる問題">[x] 宝箱の開錠難度が不正な数値になる問題</h2>
-<p>97 名前：名無しさん＠お腹いっぱい。　[sage]　投稿日：2011/02/28(月) 17:23:36.91 ID:vuzB5+ut 鍵開けバグの原因: ジャンプ直前に変数valをセットする必要があるサブルーチン同士のネスト。</p>
-<p>概要: ロックピック使用サブルーチンとプロンプト表示サブルーチンが、 共にジャンプ前にセットされた変数valの値を使うから、 開錠に失敗して前者から後者にジャンプした時点で、valの中身が開錠難度からプロンプトのX座標になってしまう。 再試行を選択するとロックピック使用サブルーチンの先頭にジャンプするだけだから、 キャンセルしてロックピック使用サブルーチンから抜けない限り、開錠難度 = プロンプトのX座標のままになる。</p>
-<p>別変数作って退避すればよい action.hsp 868行目 f=false if i<em>2 &lt; val : txt lang(“この鍵を開ける技術はない。”,“The lock mechanism is beyond your skill.”): f=true if f=false:if i/2 &gt;= val{ txt lang(“楽勝だ。”,“Easy.”) }else{ if rnd(rnd(i</em>2)+1) &lt; val : txt lang(“開錠に失敗した。”,“You fail to unlock it.”) : f=true<br />
-}</p>
-<p>↓ f=false if i<em>2 &lt; keyLv : txt lang(“この鍵を開ける技術はない。”,“The lock mechanism is beyond your skill.”): f=true if f=false:if i/2 &gt;= keyLv{ txt lang(“楽勝だ。”,“Easy.”) }else{ if rnd(rnd(i</em>2)+1) &lt; keyLv : txt lang(“開錠に失敗した。”,“You fail to unlock it.”) : f=true } action.hsp 952行目 val=iParam2(ci):gosub <em>lockpick ↓ keyLv=iParam2(ci):gosub </em>lockpick</p>
+<h3 id="概要">概要</h3>
+<p>宝箱を開けるのに一度失敗して再度鍵を開けようとするとき、開錠の難易度が大幅に上昇する。</p>
+<h3 id="原因">原因</h3>
+<p>宝箱を開ける処理ともう一度試すかどうか確認するプロンプトを表示する処理とでは、ともに呼び出し前にグローバル変数 <code>val</code> をセットしておく必要がある。この二つのサブルーチンがネストしているために <code>val</code> の値が上書きされてしまう。</p>
+<h3 id="修正方法">修正方法</h3>
+<p>鍵開け側の <code>val</code> を別の変数名に変更してやればよい。</p>
+<ol type="1">
+<li><code>gosub *label_2208</code> を行なっている2箇所の直前にある <code>val</code> の名前を <code>lockDifficulty</code> に変更する。</li>
+<li><code>*label_2208</code> 内での開錠難易度を表す <code>val</code> を <code>lockDifficulty</code> に変更する (3箇所)。このとき、<code>gosub *label_2130</code> のすぐ上にある <code>val</code> の名前は変更してはならない。</li>
+</ol>
 <h2 id="x-素材箱を開ける処理でスタックオーバーフローが起こる問題">[x] 素材箱を開ける処理でスタックオーバーフローが起こる問題</h2>
-<p>627 名前：名無しさん＠お腹いっぱい。[sage] 投稿日：2011/04/07(木) 21:14:15.17 ID:qvc+3rNS ん、開けてアイテムが出てくる類の物を開けると呼ばれるのが<em>act_open これはgotoでしか呼ばれない で、</em>act_open内からお年玉かそれ以外かで<em>open_newYearもしくは</em>open_chestが gosubで呼ばれ、returnしてきた場合は画面再描画後、goto <em>turn_endする ~</em>open_chestが呼び出された場合、開けたアイテムが素材箱の場合returnせずに ~<em>open_chest内の処理から直接goto </em>turn_endする 素材箱以外の場合は相応の処理後returnで<em>act_openへ戻る ちなみに</em>open_chestは*act_open以外からの呼び出しは無い</p>
-<p>となっててこれはまずいんじゃないか？ってことHSPがその辺無問題なら 単に俺のHSPに対する知識不足ってことでいいんだけど</p>
-<p>631 名前：名無しさん＠お腹いっぱい。[sage] 投稿日：2011/04/07(木) 21:59:22.49 ID:2XGY+/YV ~&gt;&gt;627 素材箱240個くらい連続で空けてみたら落ちたよ</p>
-<p>HspError 29 WinError 0 Ver 1220 Mode 0 efId 1117 efP 160 Area 14/1 ci -1#394 ti 0#636 cc 0#0 tc 0#0 rc 80#39 3. com_inventory15/0 ct:0 2. turn_end:pc ct:0 1. pc_turn_init ct:0 0. com_inventory15/0 ct:0 ~* error in function:screen_draw:2</p>
-<p>たしかにそれはバグだね</p>
-<p>action.hsp 973行目 call effect:goto *turn_end ↓ call effect:return</p>
+<h3 id="概要-1">概要</h3>
+<p>素材箱を連続で何度も開けるとスタックオーバーフローし、クラッシュする。</p>
+<h3 id="原因-1">原因</h3>
+<p><code>label_2213</code> は <code>gosub</code> で呼ばれる (<code>label_2212</code>から呼ばれる1箇所のみ)。素材箱以外を開けたときは <code>return</code> により呼び出し元、ここでは <code>label_2212</code> へ帰るが、素材箱を開けると <code>label_2213</code> から直接 <code>goto *label_2742</code> する。以下に簡略化したコードを示す:</p>
+<pre class="hsp"><code>*label_2212
+    gosub *label_2213
+    goto *label_2742
+
+*label_2213
+    if (開けた箱が素材箱) {
+        goto *label_2742
+    } else {
+        return
+    }
+
+*label_2742
+    ...</code></pre>
+<p>すなわち、素材箱を開けると <code>gosub *label_2213</code> で積まれた関数のコールスタックが減らないままいつまでも残り続けることになる。これによりスタックオーバーフローが起こる。</p>
+<h3 id="修正方法-1">修正方法</h3>
+<p>素材箱を開けたときも他の箱を開けたときと同じく呼び出し元に <code>return</code> してやればよい。</p>
+<ol type="1">
+<li>if 文 <code>if ( inv(3, ri) == 394 ) {</code> の中の <code>goto *label_2742</code> を <code>return</code> に変更する。</li>
+</ol>
 <h2 id="x-追加攻撃の際攻撃属性が初期化されない問題">[x] 追加攻撃の際攻撃属性が初期化されない問題</h2>
-<p>742 名前：名無しさん＠お腹いっぱい。　[sage]　投稿日：2011/03/09(水) 20:04:14.78 ID:nRrH0tc4 [4/5] 公式掲示板にあったやつ 攻撃時のエンチャント処理の後eleが初期化されてないので 属性ダメ追加があると追加打撃/射撃時にその属性で攻撃してしまう 適当なところでele=0に戻してやる必要がある</p>
-<p>追加打撃、追加射撃時のダメージ属性修正 　属性ダメ追加があると追加打撃/射撃時にその属性で攻撃してしまう 　対処 　action.hsp 1452行目 　　最後に:ele=0を追加</p>
+<h3 id="概要-2">概要</h3>
+<p>属性ダメージを与えるエンチャントを持った武器を使ってダメージを与えたあと、追加打撃/射撃が発生するとその属性で攻撃が行われてしまう。</p>
+<h3 id="原因-2">原因</h3>
+<p>ダメージの属性はグローバル変数 <code>ele</code> で管理されているが、追加打撃/射撃では <code>ele</code> が初期化されず、前の属性が残ってしまう。</p>
+<h3 id="修正方法-2">修正方法</h3>
+<p>追加打撃/射撃を処理する直前で <code>ele</code> を <code>0</code> に初期化してやればよい。</p>
+<ol type="1">
+<li>if 文 <code>if ( extraattack == 0 ) {</code> の一行下に <code>ele = 0</code> を追加する。</li>
+</ol>
 <h2 id="x-近接攻撃のエンチャント発動ダメージ基準で反撃を食らう問題">[x] 近接攻撃のエンチャント発動ダメージ基準で反撃を食らう問題</h2>
 <p>エンチャントの発動のときにdmgが上書きされてしまう dmg = calcattackdmg() の下あたりで attackdmg = dmg とでもしておいて 切り傷エンチャの反撃 dmghp cc, attackdmg * cdata(92, tc) / 100 + 1, tc, 61, 100 棘が刺さる方（2箇所）も dmghp cc, limit(attackdmg / 10, 1, cdata(51, tc) / 10), tc, p, cdata(78, tc) / 1000 としておいて ifが閉じるあたりで一応 attackdmg = 0 しとく 処理の順変えてもいいかもしれないがテキスト順が変わるし何とも</p>
 <h2 id="x-攻撃時のアニメのダメージ参照先が誤っている問題">[x] 攻撃時のアニメのダメージ参照先が誤っている問題</h2>
@@ -1113,8 +1140,12 @@ aplsel windowTitle:if stat=1:dialog &quot;Failed to get WINDOW ID&quot;,1:clrobj
 <p>help.hsp 85行目 tx=50:ty=345 ↓ tx=50:ty=windowH-255</p>
 <h1 id="quest.hsp">quest.hsp</h1>
 <h2 id="護衛対象が期限切れで死んだときレイハンドで生き返らせると護衛対象フラグが消える問題">[ ] 護衛対象が期限切れで死んだときレイハンドで生き返らせると護衛対象フラグが消える問題</h2>
-<p>1.22にて護衛依頼の期限切れ時にレイハンドで復活させると護衛対象フラグが消えるっぽい。 – 2011-03-17 (木) 17:02:22</p>
-<h1 id="sound.hsp">sound.hsp</h1>
+<h3 id="概要-3">概要</h3>
+<p>期限切れで死んだ護衛依頼の対象NPCをレイハンドで復活させると護衛対象フラグが消失する。すなわちPCのペットになる。</p>
+<h3 id="原因-3">原因</h3>
+<p>TODO</p>
+<h3 id="修正方法-3">修正方法</h3>
+<p>TODO # sound.hsp</p>
 <h2 id="map_init_mainで指定された音楽が再生されない問題">[ ] <code>*map_init_main</code>で指定された音楽が再生されない問題</h2>
 <p>~&gt;&gt;129の内容は差し戻しておいてくれると助かるます</p>
 <p>if cfg_music=false : returnの下に if music=0 : if mMusic!0 : music=mMusicを書き加え if music=0{ }内のif mMusic!0 :music=mMusicはコメントアウト これで基本的には問題がないように思える</p>
@@ -1125,6 +1156,8 @@ aplsel windowTitle:if stat=1:dialog &quot;Failed to get WINDOW ID&quot;,1:clrobj
 <p>またディスク使用時に“再生した。”となっているが“を再生した。”と助詞を入れておくと良い</p>
 <h1 id="text.hsp">text.hsp</h1>
 <h2 id="収穫依頼の報酬計算がオーバーフローする問題">[ ] 収穫依頼の報酬計算がオーバーフローする問題</h2>
+<h3 id="概要-4">概要</h3>
+<p>収穫依頼の報酬の計算においてオーバーフローが起こる。</p>
 <p>収穫依頼のボーナス計算にバグあるね。報酬11317gp ノルマ132.5sの依頼で201s収穫したのに11317gpだった。同等の他の依頼で170収穫した時はちゃんと増えたから上限ではなさそう。 – 2011-04-15 (金) 05:07:49 ↑追記　140の依頼で250収穫してもボーナスがなかった。セリフは「色をつけた」になってる。200以上収穫したらダメなのかもしれない。 – 2011-04-15 (金) 19:13:05</p>
 <h1 id="others">Others</h1>
 <h2 id="x-カジノで連勝するほどエーテル抗体の取得率が下がる問題">[x] カジノで連勝するほどエーテル抗体の取得率が下がる問題</h2>
